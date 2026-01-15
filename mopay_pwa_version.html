@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Mo-Pay">
+    <meta name="theme-color" content="#4F46E5">
+    <meta name="description" content="Aplikasi manajemen keuangan untuk transaksi Mo-Pay">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%234F46E5'/><text x='50%25' y='50%25' font-size='50' fill='white' text-anchor='middle' dy='.3em'>M</text></svg>">
+    <title>Mo-Pay - Manajemen Keuangan</title>
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIk1vLVBheSAtIE1hbmFqZW1lbiBLZXVhbmdhbiIsCiAgInNob3J0X25hbWUiOiAiTW8tUGF5IiwKICAic3RhcnRfdXJsIjogIi4iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiNmZmZmZmYiLAogICJ0aGVtZV9jb2xvciI6ICIjNEY0NkU1IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiZGF0YTppbWFnZS9zdmcreG1sLCUzQ3N2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJyUzRSUzQ3JlY3Qgd2lkdGg9JzEwMCcgaGVpZ2h0PScxMDAnIGZpbGw9JyM0RjQ2RTUnLyUzRSUzQ3RleHQgeD0nNTAlMjUnIHk9JzUwJTI1JyBmb250LXNpemU9JzUwJyBmaWxsPSd3aGl0ZScgdGV4dC1hbmNob3I9J21pZGRsZScgZHk9Jy4zZW0nJTNFTSUzQy90ZXh0JTNFJTNDL3N2ZyUzRSIsCiAgICAgICJzaXplcyI6ICIxOTJ4MTkyIiwKICAgICAgInR5cGUiOiAiaW1hZ2Uvc3ZnK3htbCIKICAgIH0KICBdCn0=">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            color: #1f2937;
+            margin-bottom: 5px;
+        }
+        
+        .header p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+        
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .card-header {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        
+        .card-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+        }
+        
+        .card.blue { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+        .card.green { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; }
+        .card.purple { background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%); color: white; }
+        
+        .card.blue .card-header,
+        .card.green .card-header,
+        .card.purple .card-header { color: rgba(255,255,255,0.8); }
+        
+        .card.blue .card-value,
+        .card.green .card-value,
+        .card.purple .card-value { color: white; }
+        
+        .btn-edit {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 8px;
+            font-size: 12px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        
+        .form-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .form-section h2 {
+            font-size: 18px;
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 14px;
+        }
+        
+        .btn-primary {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%);
+        }
+        
+        .table-section {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            overflow-x: auto;
+        }
+        
+        .table-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .table-header h2 {
+            font-size: 18px;
+            color: #1f2937;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 12px;
+        }
+        
+        th {
+            background: #f3f4f6;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #1f2937;
+            white-space: nowrap;
+        }
+        
+        td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .text-right { text-align: right; }
+        .text-center { text-align: center; }
+        
+        .btn-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal.show {
+            display: flex;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 400px;
+        }
+        
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #1f2937;
+        }
+        
+        .modal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .btn-secondary {
+            background: #9ca3af;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 10px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: #6b7280;
+        }
+        
+        .install-prompt {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: none;
+            text-align: center;
+        }
+        
+        .install-prompt.show {
+            display: block;
+        }
+        
+        .install-prompt button {
+            background: white;
+            color: #667eea;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            margin-top: 10px;
+            cursor: pointer;
+            width: 100%;
+        }
+        
+        .install-badge {
+            background: #10b981;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 11px;
+            display: inline-block;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="installPrompt" class="install-prompt">
+            <p style="font-size: 20px; margin-bottom: 5px;">📱 <strong>Install Mo-Pay</strong></p>
+            <p style="font-size: 14px; margin-top: 5px; opacity: 0.95;">Gunakan seperti aplikasi asli tanpa browser!</p>
+            <button onclick="installApp()">⬇️ Install Sekarang</button>
+        </div>
+        
+        <div class="header">
+            <h1>💰 Mo-Pay <span id="installedBadge" class="install-badge" style="display: none;">Installed</span></h1>
+            <p>Manajemen Keuangan Transaksi</p>
+        </div>
+        
+        <div class="cards">
+            <div class="card blue">
+                <div class="card-header">Modal Awal</div>
+                <div class="card-value" id="modalValue">Rp 20.000.000</div>
+                <button class="btn-edit" onclick="openEditModal()">Edit Modal</button>
+            </div>
+            
+            <div class="card green">
+                <div class="card-header">Total Keuntungan</div>
+                <div class="card-value" id="keuntunganValue">Rp 0</div>
+            </div>
+            
+            <div class="card purple">
+                <div class="card-header">Saldo Akhir</div>
+                <div class="card-value" id="saldoValue">Rp 20.000.000</div>
+            </div>
+        </div>
+        
+        <div class="form-section">
+            <h2>➕ Tambah Transaksi</h2>
+            
+            <div class="form-group">
+                <label>Tanggal</label>
+                <input type="date" id="tanggal">
+            </div>
+            
+            <div class="form-group">
+                <label>Jenis Layanan</label>
+                <select id="jenisLayanan">
+                    <option>Transfer Antar Bank</option>
+                    <option>Tarik Tunai Semua Bank</option>
+                    <option>Admin Pulsa</option>
+                    <option>Admin Token Listrik</option>
+                    <option>Admin Listrik Bulanan</option>
+                    <option>Admin Wifi</option>
+                    <option>Top Up DANA</option>
+                    <option>Top Up GoPay</option>
+                    <option>Top Up OVO</option>
+                    <option>Top Up ShopeePay</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>Nomor Tujuan</label>
+                <input type="text" id="nomorTujuan" placeholder="Masukkan nomor tujuan">
+            </div>
+            
+            <div class="form-group">
+                <label>Nominal</label>
+                <input type="number" id="nominal" placeholder="Masukkan nominal">
+            </div>
+            
+            <button class="btn-primary" onclick="addTransaction()">Tambah Transaksi</button>
+        </div>
+        
+        <div class="table-section">
+            <div class="table-header">
+                <h2>📊 Riwayat</h2>
+                <button class="btn-primary btn-success" onclick="exportCSV()" style="width: auto; padding: 10px 20px; font-size: 14px;">Export</button>
+            </div>
+            
+            <div style="overflow-x: auto;">
+                <table id="transactionTable">
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Layanan</th>
+                            <th>Nomor</th>
+                            <th class="text-right">Nominal</th>
+                            <th class="text-right">Admin</th>
+                            <th class="text-right">Total</th>
+                            <th class="text-right">Saldo</th>
+                            <th class="text-center">Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                        <tr>
+                            <td colspan="8" class="empty-state">Belum ada transaksi</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <h3>Edit Modal Awal</h3>
+            <div class="form-group">
+                <input type="number" id="newModal" placeholder="Masukkan modal baru">
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="saveModal()">Simpan</button>
+                <button class="btn-secondary" onclick="closeEditModal()">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let deferredPrompt;
+        let state = {
+            modalAwal: 20000000,
+            transactions: []
+        };
+        
+        // Load data
+        function loadData() {
+            const saved = localStorage.getItem('mopay_mobile');
+            if (saved) {
+                state = JSON.parse(saved);
+            }
+            document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+        }
+        
+        // Save data
+        function saveData() {
+            localStorage.setItem('mopay_mobile', JSON.stringify(state));
+        }
+        
+        // Format rupiah
+        function formatRupiah(num) {
+            return 'Rp ' + num.toLocaleString('id-ID');
+        }
+        
+        // Calculate admin fee
+        function hitungBiayaAdmin(jenis, nominal) {
+            const n = parseFloat(nominal);
+            if (jenis === 'Admin Pulsa') return 2000;
+            if (jenis === 'Admin Token Listrik') return 3000;
+            if (jenis === 'Admin Listrik Bulanan') return 3000;
+            if (jenis === 'Admin Wifi') return 2000;
+            
+            if (jenis === 'Transfer Antar Bank' || jenis === 'Tarik Tunai Semua Bank') {
+                if (n >= 50000 && n <= 500000) return 3000;
+                if (n >= 501000 && n <= 1000000) return 5000;
+                if (n >= 1001000 && n <= 2000000) return 7000;
+                if (n >= 2001000 && n <= 3000000) return 10000;
+                if (n >= 3001000 && n <= 5000000) return 15000;
+            }
+            
+            if (jenis.startsWith('Top Up')) {
+                if (n >= 5000 && n <= 500000) return 3000;
+                if (n >= 501000 && n <= 1000000) return 5000;
+                if (n >= 1001000 && n <= 3000000) return 7000;
+                if (n >= 3001000 && n <= 5000000) return 10000;
+            }
+            return 0;
+        }
+        
+        // Add transaction
+        function addTransaction() {
+            const tanggal = document.getElementById('tanggal').value;
+            const jenis = document.getElementById('jenisLayanan').value;
+            const nomor = document.getElementById('nomorTujuan').value;
+            const nominal = document.getElementById('nominal').value;
+            
+            if (!tanggal || !nomor || !nominal) {
+                alert('Lengkapi semua field!');
+                return;
+            }
+            
+            const admin = hitungBiayaAdmin(jenis, nominal);
+            if (admin === 0) {
+                alert('Nominal tidak sesuai ketentuan!');
+                return;
+            }
+            
+            state.transactions.push({
+                id: Date.now(),
+                tanggal,
+                jenis,
+                nomor,
+                nominal: parseFloat(nominal),
+                admin
+            });
+            
+            saveData();
+            updateDisplay();
+            
+            // Clear form
+            document.getElementById('nomorTujuan').value = '';
+            document.getElementById('nominal').value = '';
+            document.getElementById('tanggal').value = new Date().toISOString().split('T')[0];
+        }
+        
+        // Delete transaction
+        function deleteTransaction(id) {
+            if (confirm('Hapus transaksi ini?')) {
+                state.transactions = state.transactions.filter(t => t.id !== id);
+                saveData();
+                updateDisplay();
+            }
+        }
+        
+        // Update display
+        function updateDisplay() {
+            let saldo = state.modalAwal;
+            let totalKeuntungan = 0;
+            
+            const tbody = document.getElementById('tableBody');
+            if (state.transactions.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="8" class="empty-state">Belum ada transaksi</td></tr>';
+            } else {
+                tbody.innerHTML = state.transactions.map(t => {
+                    totalKeuntungan += t.admin;
+                    saldo += t.admin;
+                    return `
+                        <tr>
+                            <td>${t.tanggal}</td>
+                            <td>${t.jenis}</td>
+                            <td>${t.nomor}</td>
+                            <td class="text-right">${formatRupiah(t.nominal)}</td>
+                            <td class="text-right">${formatRupiah(t.admin)}</td>
+                            <td class="text-right">${formatRupiah(t.nominal + t.admin)}</td>
+                            <td class="text-right"><strong>${formatRupiah(saldo)}</strong></td>
+                            <td class="text-center">
+                                <button class="btn-delete" onclick="deleteTransaction(${t.id})">❌</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
+            }
+            
+            document.getElementById('modalValue').textContent = formatRupiah(state.modalAwal);
+            document.getElementById('keuntunganValue').textContent = formatRupiah(totalKeuntungan);
+            document.getElementById('saldoValue').textContent = formatRupiah(saldo);
+        }
+        
+        // Modal functions
+        function openEditModal() {
+            document.getElementById('newModal').value = state.modalAwal;
+            document.getElementById('editModal').classList.add('show');
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+        
+        function saveModal() {
+            const newModal = parseFloat(document.getElementById('newModal').value);
+            if (newModal > 0) {
+                state.modalAwal = newModal;
+                saveData();
+                updateDisplay();
+                closeEditModal();
+            }
+        }
+        
+        // Export CSV
+        function exportCSV() {
+            let csv = 'Tanggal,Jenis,Nomor,Nominal,Admin,Total,Saldo\n';
+            let saldo = state.modalAwal;
+            
+            state.transactions.forEach(t => {
+                saldo += t.admin;
+                csv += `${t.tanggal},${t.jenis},${t.nomor},${t.nominal},${t.admin},${t.nominal + t.admin},${saldo}\n`;
+            });
+            
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `mopay-${new Date().toISOString().split('T')[0]}.csv`;
+            a.click();
+        }
+        
+        // PWA Install
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            document.getElementById('installPrompt').classList.add('show');
+        });
+        
+        window.addEventListener('appinstalled', () => {
+            document.getElementById('installPrompt').classList.remove('show');
+            document.getElementById('installedBadge').style.display = 'inline-block';
+            localStorage.setItem('mopay_installed', 'true');
+        });
+        
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') {
+                        console.log('App installed');
+                        document.getElementById('installPrompt').classList.remove('show');
+                    }
+                    deferredPrompt = null;
+                });
+            } else {
+                // Fallback untuk iOS atau browser yang tidak support
+                alert('Untuk install:\n\nAndroid: Tap menu (⋮) > "Install app"\n\niPhone: Tap Share (⬆️) > "Add to Home Screen"');
+            }
+        }
+        
+        // Check if already installed
+        if (localStorage.getItem('mopay_installed') === 'true' || 
+            window.matchMedia('(display-mode: standalone)').matches) {
+            document.getElementById('installedBadge').style.display = 'inline-block';
+        }
+        
+        // Initialize
+        loadData();
+        updateDisplay();
+    </script>
+</body>
+</html>
